@@ -96,7 +96,7 @@ pipeline {
                 export PATH=$BIN_PATH:$PATH
                 export KUBECONFIG=$KUBECONFIG_PATH
 
-                kubectl apply -f k8s/
+                kubectl apply -f k8s/ --validate=false
                 kubectl set image deployment/snake-game snake-game=$APP_IMAGE -n $NAMESPACE
                 """
             }
