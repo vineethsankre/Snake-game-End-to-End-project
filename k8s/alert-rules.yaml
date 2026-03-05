@@ -1,0 +1,44 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: snake-game-alerts
+  namespace: monitoring
+spec:
+  groups:
+  - name: snake-game.rules
+    rules:
+
+    - alert: HighCpuUsage
+      expr: sum(rate(container_cpu_usage_seconds_total{namespace="default"}[2m])) > 1
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        description: "Pod CPU usage is high"
+        summary: "High CPU usage"
+
+    - alert: HighMemoryUsage
+      expr: sum(container_memory_usage_bytes{namespace="default"}) > 500000000
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        description: "Pod memory usage high"
+        summary: "High memory usage"
+
+    - alert: PodCrashLooping
+      expr: kube_pod_container_status_restarts_total{namespace="default"} > 3
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Pod restarting too many times"
+
+    - alert: NodeDown
+      expr: kube_node_status_condition{condition="Ready",status!="true"} == 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Node is down"
+
