@@ -11,8 +11,10 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                dir('terraform-eks') {
-                    sh 'terraform init'
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins-creds']]) {
+                    dir('terraform-eks') {
+                        sh 'terraform init'
+                    }
                 }
             }
         }
