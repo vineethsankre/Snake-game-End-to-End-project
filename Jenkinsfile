@@ -22,7 +22,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/vineethsankre/Snake-game-End-to-End-project.git'
+                git branch: 'main', url:'https://github.com/vineethsankre/Snake-game-End-to-End-project.git'
             }
         }
 
